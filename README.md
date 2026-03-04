@@ -17,8 +17,11 @@ Objetivos:
 - Vite
 - TypeScript
 
+### Estilização
+- Tailwind CSS
+
 ### Roteamento
-- `react-router`
+- `@tanstack/react-router`
 
 ### Requisições e cache de servidor
 - `axios`
@@ -39,15 +42,25 @@ Objetivos:
 ### Tabelas
 - `@tanstack/react-table`
 
+### Qualidade de código
+- ESLint
+- `eslint-plugin-unused-imports`
+
 ---
 
 ## 3. Convenção de Idioma
 
-
+Regra oficial:
+- **Código técnico em inglês** (nomes de arquivos técnicos, utilitários, componentes base, funções genéricas).
+- **Domínio em português** (entidades de negócio, casos de uso, módulos e submódulos de negócio).
 
 Exemplos:
 - Técnico: `QueryClientProvider`, `apiClient`, `AppRouter`, `usePagination`.
-- Domínio: `user`, `modulo`, `sub-modulo1`, `sub-modulo2`, `auth`.
+- Domínio: `usuario`, `modulo`, `sub-modulo1`, `sub-modulo2`, `autenticacao`.
+
+Preferências de nomenclatura de domínio:
+- Usar `usuario` em vez de `user`.
+- Usar `autenticacao` em vez de `auth`.
 
 ---
 
@@ -170,7 +183,7 @@ src/
 
 ## 7. Padrões de Implementação
 
-### React Router
+### TanStack Router
 - Centralizar definição de rotas em `lib/router/app-router.tsx`.
 - Rotas por domínio mapeadas para páginas em `pages/*`.
 
@@ -194,12 +207,21 @@ src/
 - `lucide-react` para ícones.
 - `sonner` para toast/feedback de operação.
 
+### ESLint (imports não usados e regras base)
+- Ativar `eslint-plugin-unused-imports` para bloquear imports não usados.
+- Regras recomendadas:
+	- `unused-imports/no-unused-imports: error`
+	- `unused-imports/no-unused-vars: [warn, { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }]`
+	- `@typescript-eslint/no-unused-vars: off` (evita duplicidade com `unused-imports`)
+	- `no-console: warn` (permitir apenas quando necessário)
+
 ---
 
 ## 8. Dependências esperadas
 
 ```bash
-pnpm add react-router axios @tanstack/react-query zod react-hook-form @tanstack/react-table lucide-react sonner
+pnpm add @tanstack/react-router axios @tanstack/react-query zod react-hook-form @tanstack/react-table lucide-react sonner
+pnpm add -D tailwindcss postcss autoprefixer eslint-plugin-unused-imports
 ```
 
 > Observação: `shadcn/ui` é adicionado via CLI/configuração do próprio pacote e gera componentes locais no projeto.
