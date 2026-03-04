@@ -1,73 +1,224 @@
-# React + TypeScript + Vite
+# Documentação Técnica do Template Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 1. Objetivo
+Este repositório é o **template oficial** para novos projetos frontend da equipe.
 
-Currently, two official plugins are available:
+Objetivos:
+- Padronizar arquitetura, bibliotecas e convenções.
+- Reduzir tempo de setup de novos projetos.
+- Garantir consistência entre código, UI e lógica de negócio.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 2. Stack Padrão (Obrigatório)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Base
+- React
+- Vite
+- TypeScript
 
-## Expanding the ESLint configuration
+### Roteamento
+- `react-router`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Requisições e cache de servidor
+- `axios`
+- `@tanstack/react-query`
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Estado 
+- Context API (nativa do React)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Validação e formulário
+- `zod`
+- `react-hook-form`
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### UI e componentes
+- `shadcn/ui`
+- `lucide-react`
+- `sonner`
+
+### Tabelas
+- `@tanstack/react-table`
+
+---
+
+## 3. Convenção de Idioma
+
+Regra oficial:
+- **Código técnico em inglês** (nomes de arquivos técnicos, utilitários, componentes base, funções genéricas).
+- **Domínio em português** (entidades de negócio, casos de uso, nomes de módulos de negócio).
+
+Exemplos:
+- Técnico: `QueryClientProvider`, `apiClient`, `AppRouter`, `usePagination`.
+- Domínio: `user`, `modulo`, `sub-modulo1`, `sub-modulo2`, `auth`.
+
+---
+
+## 4. Arquitetura
+
+### Padrão arquitetural
+- Atomic Design para componentes de UI (`atoms`, `molecules`, `organisms`) com composição de tela em `pages`.
+
+
+## 5. Estrutura de Pastas (Atual)
+
+```text
+src/
+├── App.css
+├── App.tsx
+├── assets/
+│   └── react.svg
+├── components/
+│   ├── atoms/
+│   ├── molecules/
+│   ├── organisms/
+│   └── ui/
+├── contexts/
+│   ├── modulo/
+│   │   ├── modulo-context.ts
+│   │   └── modulo-provider.tsx
+│   └── user/
+│       ├── user-context.ts
+│       └── user-provider.tsx
+├── hooks/
+├── index.css
+├── lib/
+├── main.tsx
+├── pages/
+│   ├── auth/
+│   └── user/
+└── service/
+	├── modulo/
+	│   ├── sub-modulo1/
+	│   │   ├── mutations/
+	│   │   └── queries/
+	│   └── sub-modulo2/
+	│       ├── mutations/
+	│       └── queries/
+	└── user/
+		├── mutations/
+		│   ├── delete-user.ts
+		│   ├── post-user.ts
+		│   └── update-user.ts
+		└── queries/
+			├── get-user-by-id.ts
+			└── get-user-list.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Regras do modelo atual:
+- `components/ui`: base de componentes reutilizáveis (sem regra de negócio).
+- `atoms`, `molecules`, `organisms`: composição de interface seguindo Atomic Design.
+- `contexts/*`: orquestração de estado por domínio (`modulo`, `user`).
+- `service/*`: camada de acesso a dados separada por domínio/subdomínio e por operação (`queries` e `mutations`).
+- `pages/*`: organização de telas por área funcional (`auth`, `user`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 6. Exemplo de Responsabilidade por Camada
+
+### `service/*`
+- Organização da camada de serviços por domínio técnico (`modulo`, `user`).
+- `mutations` para operações de escrita.
+- `queries` para operações de leitura.
+
+### `service/user/mutations` e `service/user/queries`
+- Funções de comunicação HTTP segmentadas por tipo de operação.
+- Não contém estado de tela.
+
+### `hooks/<dominio>`
+- Hooks com React Query.
+- Chaves de cache padronizadas por domínio.
+
+### `contexts/<dominio>`
+- Estado da feature.
+- Regras de negócio e orquestração.
+- Composição entre formulário, queries e ações de UI.
+
+### `pages/<dominio>`
+- Composição de tela (UI + contexto).
+
+### Exemplo mínimo funcional (mapa de arquivos)
+
+```text
+src/
+├── service/
+│   └── user/
+│       ├── mutations/post-user.ts
+│       └── queries/get-user-list.ts
+├── components/
+│   ├── atoms/app-input.tsx
+│   └── organisms/user-table.tsx
+├── contexts/
+│   └── user/user-provider.tsx
+├── hooks/
+│   └── use-user-query.ts
+├── lib/
+│   ├── router/app-router.tsx
+│   └── table/table.tsx
+└── pages/
+	└── user/list-user-page.tsx
 ```
+
+Fluxo desse exemplo mínimo:
+1. Rota aponta para `list-user-page.tsx`.
+2. Página consome contexto do domínio `user`.
+3. Contexto orquestra query/mutation e regra de negócio.
+4. Serviço usa Axios para comunicação HTTP.
+5. UI renderiza tabela com TanStack Table e feedback com Sonner.
+
+---
+
+## 7. Exemplo de Fluxo (Criar Usuário)
+
+1. Usuário preenche formulário em `pages/user/create-user-page.tsx`.
+2. `react-hook-form` controla estado do formulário.
+3. `zod` valida payload com o schema da feature.
+4. Contexto `user-context` aplica regra de negócio.
+5. Mutation (`post-user.ts`) envia via camada `service/user`.
+6. Em sucesso/erro, notificação com `sonner`.
+7. Lista é invalidada/refetch com React Query.
+
+---
+
+## 8. Padrões de Implementação
+
+### React Router
+- Centralizar definição de rotas em `lib/router/app-router.tsx`.
+- Rotas por domínio mapeadas para páginas em `pages/*`.
+
+### Context API
+- Um provider por domínio quando houver regra de negócio própria.
+- Evitar contexto global único com responsabilidades misturadas.
+
+### React Query
+- Padronizar query keys por domínio:
+	- `['user', 'list']`
+	- `['user', 'detail', userId]`
+
+### shadcn/ui
+- Componentes base ficam em `components/ui`.
+- Evitar regra de negócio dentro de `components/ui`; compor casos de uso em `molecules/organisms/pages`.
+
+### TanStack Table
+- Reutilizar tabela base em `lib/table/table.tsx`.
+
+### Ícones e feedback
+- `lucide-react` para ícones.
+- `sonner` para toast/feedback de operação.
+
+---
+
+## 9. Dependências esperadas
+
+```bash
+pnpm add react-router axios @tanstack/react-query zod react-hook-form @tanstack/react-table lucide-react sonner
+```
+
+> Observação: `shadcn/ui` é adicionado via CLI/configuração do próprio pacote e gera componentes locais no projeto.
+
+---
+
+## 10. Governança
+
+- Toda nova feature deve seguir esta estrutura.
+- Exceções arquiteturais devem ser documentadas neste arquivo.
+- Este documento é a referência central para novos templates e evoluções.
