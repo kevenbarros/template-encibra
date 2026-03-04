@@ -43,9 +43,7 @@ Objetivos:
 
 ## 3. Convenção de Idioma
 
-Regra oficial:
-- **Código técnico em inglês** (nomes de arquivos técnicos, utilitários, componentes base, funções genéricas).
-- **Domínio em português** (entidades de negócio, casos de uso, nomes de módulos de negócio).
+
 
 Exemplos:
 - Técnico: `QueryClientProvider`, `apiClient`, `AppRouter`, `usePagination`.
