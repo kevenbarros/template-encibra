@@ -105,7 +105,6 @@ src/
 Regras do modelo atual:
 - `components/ui`: base de componentes reutilizáveis (sem regra de negócio).
 - `atoms`, `molecules`, `organisms`: composição de interface seguindo Atomic Design.
-- `contexts/*`: orquestração de estado por domínio (`modulo`, `user`).
 - `service/*`: camada de acesso a dados separada por domínio/subdomínio e por operação (`queries` e `mutations`).
 - `pages/*`: organização de telas por área funcional (`auth`, `user`).
 
@@ -156,28 +155,20 @@ src/
 	└── user/list-user-page.tsx
 ```
 
-Fluxo desse exemplo mínimo:
-1. Rota aponta para `list-user-page.tsx`.
-2. Página consome contexto do domínio `user`.
-3. Contexto orquestra query/mutation e regra de negócio.
-4. Serviço usa Axios para comunicação HTTP.
-5. UI renderiza tabela com TanStack Table e feedback com Sonner.
-
 ---
 
-## 7. Exemplo de Fluxo (Criar Usuário)
+## 6. Exemplo de Fluxo (Criar Usuário)
 
 1. Usuário preenche formulário em `pages/user/create-user-page.tsx`.
 2. `react-hook-form` controla estado do formulário.
 3. `zod` valida payload com o schema da feature.
-4. Contexto `user-context` aplica regra de negócio.
-5. Mutation (`post-user.ts`) envia via camada `service/user`.
-6. Em sucesso/erro, notificação com `sonner`.
-7. Lista é invalidada/refetch com React Query.
+4. Mutation (`post-user.ts`) envia via camada `service/user`.
+5. Em sucesso/erro, notificação com `sonner`.
+6. Lista é invalidada/refetch com React Query.
 
 ---
 
-## 8. Padrões de Implementação
+## 7. Padrões de Implementação
 
 ### React Router
 - Centralizar definição de rotas em `lib/router/app-router.tsx`.
@@ -205,7 +196,7 @@ Fluxo desse exemplo mínimo:
 
 ---
 
-## 9. Dependências esperadas
+## 8. Dependências esperadas
 
 ```bash
 pnpm add react-router axios @tanstack/react-query zod react-hook-form @tanstack/react-table lucide-react sonner
@@ -215,7 +206,7 @@ pnpm add react-router axios @tanstack/react-query zod react-hook-form @tanstack/
 
 ---
 
-## 10. Governança
+## 9. Governança
 
 - Toda nova feature deve seguir esta estrutura.
 - Exceções arquiteturais devem ser documentadas neste arquivo.
